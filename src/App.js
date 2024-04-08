@@ -1,5 +1,10 @@
+import "./styles/global.scss";
 function App() {
-  return <></>;
+  return (
+    <>
+      <p>This is a sentence. </p>
+    </>
+  );
 }
 
 export default App;
