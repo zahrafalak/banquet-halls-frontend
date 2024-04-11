@@ -12,9 +12,9 @@ function App() {
           {/* Route for homepage */}
           <Route path="/" element={<HomePage />} />
           {/* Route for menu page */}
-          <Route path="/" element={<MenuPage />} />
+          <Route path="/menu" element={<MenuPage />} />
           {/* Route for booking page */}
-          <Route path="/" element={<BookingPage />} />
+          <Route path="/booking" element={<BookingPage />} />
         </Routes>
       </BrowserRouter>
     </>
