@@ -1,14 +1,17 @@
+@use "../../styles/variables.scss" as *;
+
 .logo {
   height: 5rem;
 }
 
 .custom-navbar {
-  background-color: #e3f2fd;
+  background-color: $primary-blue;
   padding: 0 2rem;
 }
 
 .nav-link {
   &:hover {
-    color: #0056b3; // Example hover color
+    background-color: $secondary-blue;
+    color: $white;
   }
 }
