@@ -9,9 +9,9 @@ const MainCarousel = () => {
     <Carousel fade>
       <Carousel.Item>
         <img
-          className="d-block w-100 carousel-item__img" // Bootstrap classes to make the image responsive and cover the width
+          className="carousel-item__img"
           src={carouselImageOne}
-          alt="First slide"
+          alt="Inside view of a spacious hall"
         />
         <Carousel.Caption>
           <h3>Grand Spaces</h3>
@@ -20,9 +20,9 @@ const MainCarousel = () => {
       </Carousel.Item>
       <Carousel.Item>
         <img
-          className="d-block w-100"
+          className="carousel-item__img"
           src={carouselImageTwo}
-          alt="First slide"
+          alt="Close up of space setting"
         />
 
         <Carousel.Caption>
@@ -32,9 +32,9 @@ const MainCarousel = () => {
       </Carousel.Item>
       <Carousel.Item>
         <img
-          className="d-block w-100"
+          className="carousel-item__img"
           src={carouselImageThree}
-          alt="First slide"
+          alt="Elegant dining setting"
         />
 
         <Carousel.Caption>
