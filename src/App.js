@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./pages/HomePage/HomePage";
 import MenuPage from "./pages/MenuPage/MenuPage";
 import BookingPage from "./pages/BookingPage/BookingPage";
+import UnmatchedRoutes from "./pages/UnmatchedRoutes/UnmatchedRoutes";
+
 function App() {
   return (
     <>
@@ -15,6 +17,8 @@ function App() {
           <Route path="/menu" element={<MenuPage />} />
           {/* Route for booking page */}
           <Route path="/booking" element={<BookingPage />} />
+          {/* Route for unmatched path */}
+          <Route path="/*" element={<UnmatchedRoutes />} />
         </Routes>
       </BrowserRouter>
     </>
