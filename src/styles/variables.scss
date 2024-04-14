@@ -4,16 +4,3 @@ $secondary-blue: #6082b6;
 $primary-text: #2d4b77;
 $white: #fff;
 $grey: #525252;
-
-// ====== MEDIA ========
-@mixin desktop {
-  @media (min-width: 1024px) {
-    @content;
-  }
-}
-
-@mixin mobile {
-  @media (max-width: 768px) {
-    @content;
-  }
-}

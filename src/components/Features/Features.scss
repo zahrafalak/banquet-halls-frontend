@@ -3,12 +3,13 @@
 
 .section-heading {
   @include section-heading;
+  color: $primary-text;
 }
 
 .features {
   display: flex;
   justify-content: space-between;
-  color: $primary-text;
+  color: $grey;
   padding: 1rem 2rem;
 
   &__icon {
