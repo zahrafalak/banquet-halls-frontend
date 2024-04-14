@@ -1,0 +1,24 @@
+@use "../../styles/variables.scss" as *;
+@use "../Features/Features.scss" as *;
+
+.footer {
+  background-color: $primary-blue;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__text {
+    margin: 0;
+    color: $secondary-blue;
+  }
+
+  &__anchor {
+    text-decoration: none;
+  }
+}
+
+.icon__footer {
+  padding: 0 1rem 0 0;
+  height: 1.5rem;
+}

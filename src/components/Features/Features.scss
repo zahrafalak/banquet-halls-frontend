@@ -3,7 +3,7 @@
 
 .section-heading {
   @include section-heading;
-  color: $primary-text;
+  color: $secondary-blue;
 }
 
 .features {
@@ -11,10 +11,6 @@
   justify-content: space-between;
   color: $grey;
   padding: 1rem 2rem;
-
-  &__icon {
-    height: 2rem;
-  }
 
   &__details {
     padding: 1rem;
@@ -32,4 +28,8 @@
 .cta {
   background-color: $secondary-blue;
   border: none;
+}
+
+.icon {
+  height: 2rem;
 }
