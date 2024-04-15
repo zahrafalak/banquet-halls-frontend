@@ -6,6 +6,7 @@ const HallsPage = () => {
   return (
     <>
       <Header />
+      <HallsCard />
       <Footer />
     </>
   );
