@@ -1,11 +1,16 @@
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
+import "./MenuPackageCard.scss";
 
 function MenuPackageCard({ packageData }) {
   return (
-    <>
-      <Card style={{ width: "18rem" }}>
-        <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
+    <div className="menu">
+      <Card className="menu-card">
+        <Card.Img
+          className="menu-card__image"
+          variant="top"
+          src={packageData.image_url}
+        />
         <Card.Body>
           <Card.Title>{packageData.title}</Card.Title>
           <Card.Text>{packageData.description}</Card.Text>
@@ -25,7 +30,7 @@ function MenuPackageCard({ packageData }) {
           </ListGroup.Item>
         </ListGroup>
       </Card>
-    </>
+    </div>
   );
 }
 
