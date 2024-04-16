@@ -6,11 +6,22 @@ import axios from "axios";
 
 const HallsPage = () => {
   const [hallsData, setHallsData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchHallsData = async () => {
-      const resp = await axios.get("http://localhost:8080/api/v1/halls");
-      setHallsData(resp.data);
+      setLoading(true);
+      try {
+        const resp = await axios.get("http://localhost:8080/api/v1/halls");
+        setHallsData(resp.data);
+        setError(null); // Reset error state
+      } catch (err) {
+        setError("Failed to fetch halls data");
+        console.error("Error fetching halls:", err);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchHallsData();
   }, []);
@@ -18,9 +29,15 @@ const HallsPage = () => {
   return (
     <>
       <Header />
-      {hallsData.map((hall) => {
-        return <HallsCard key={hall.hall_id} hallDetails={hall} />;
-      })}
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        hallsData.map((hall) => (
+          <HallsCard key={hall.hall_id} hallDetails={hall} />
+        ))
+      )}
       <Footer />
     </>
   );

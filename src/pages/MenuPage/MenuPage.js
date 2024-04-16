@@ -1,42 +1,55 @@
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 import MenuPackageCard from "../../components/MenuPackageCard/MenuPackageCard";
 
 const MenuPage = () => {
   const [menuPackages, setMenuPackages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMenuPackages = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           "http://localhost:8080/api/v1/menu-packages"
         );
-        const menuPackages = response.data.map((pkg) => ({
+        const packagesWithParsedContents = response.data.map((pkg) => ({
           ...pkg,
           contents: JSON.parse(pkg.contents), // Parse the JSON string back into an object
         }));
-        setMenuPackages(menuPackages);
+        setMenuPackages(packagesWithParsedContents);
       } catch (error) {
+        setError("Failed to fetch menu packages.");
         console.error("Error fetching menu packages:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchMenuPackages();
   }, []);
+
   return (
-    menuPackages && (
-      <>
-        <Header />
-        <div>
-          {menuPackages.map((pkg) => {
-            return <MenuPackageCard key={pkg.package_id} packageData={pkg} />;
-          })}
-        </div>
-        <Footer />
-      </>
-    )
+    <>
+      <Header />
+      <div>
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : menuPackages.length > 0 ? (
+          menuPackages.map((pkg) => (
+            <MenuPackageCard key={pkg.package_id} packageData={pkg} />
+          ))
+        ) : (
+          <p>No menu packages available.</p>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 };
 
