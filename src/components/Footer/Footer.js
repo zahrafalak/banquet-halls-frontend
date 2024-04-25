@@ -1,6 +1,6 @@
 import facebookIcon from "../../assets/icons/icon-facebook.png";
 import instagramIcon from "../../assets/icons/icon-instagram.png";
-import twitterIcon from "../../assets/icons/icon-twitter.png";
+import twitterIcon from "../../assets/icons/twitter.svg";
 import "./Footer.scss";
 
 const Footer = () => {

@@ -1,7 +1,13 @@
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import BookingForm from "../../components/BookingForm/BookingForm";
+
 const BookingPage = () => {
   return (
     <>
-      <div></div>
+      <Header />
+      <BookingForm />
+      <Footer />
     </>
   );
 };
