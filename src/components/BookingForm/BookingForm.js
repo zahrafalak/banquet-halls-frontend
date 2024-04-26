@@ -1,8 +1,10 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import React, { useContext } from "react";
+import HallsContext from "../../contexts/HallsContext";
 
-const BookingForm = ({ hallsData }) => {
-  console.log("Halls Data in BookingForm:", hallsData);
+const BookingForm = () => {
+  const { hallsData } = useContext(HallsContext);
   return (
     <>
       <Form>
@@ -27,13 +29,13 @@ const BookingForm = ({ hallsData }) => {
         <Form.Label>Choice of Hall</Form.Label>
         <Form.Select aria-label="Choice of Hall">
           <option>Choose a hall option</option>
-          {/* {hallsData.map((hall) => {
+          {hallsData.map((hall) => {
             return (
               <option key={hall.hall_id} value={hall.name}>
                 {hall.name}
               </option>
             );
-          })} */}
+          })}
         </Form.Select>
 
         <Form.Label>Choice of Menu Package</Form.Label>

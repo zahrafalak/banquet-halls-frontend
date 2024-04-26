@@ -1,7 +1,6 @@
 import Card from "react-bootstrap/Card";
 
 function HallsCard({ hallDetails }) {
-  console.log(hallDetails);
   return (
     <Card className="card">
       <Card.Img
