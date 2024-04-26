@@ -2,9 +2,12 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import React, { useContext } from "react";
 import HallsContext from "../../contexts/HallsContext";
+import MenuContext from "../../contexts/MenuContext";
 
 const BookingForm = () => {
   const { hallsData } = useContext(HallsContext);
+  const { menuPackages } = useContext(MenuContext);
+
   return (
     <>
       <Form>
@@ -41,9 +44,14 @@ const BookingForm = () => {
         <Form.Label>Choice of Menu Package</Form.Label>
         <Form.Select aria-label="Choice of Menu Package">
           <option>Choose a menu option</option>
-          <option value="Classic Elegance">Classic Elegance</option>
-          <option value="Modern Fusion">Modern Fusion</option>
-          <option value="Vegetarian Delight">Vegetarian Delight</option>
+
+          {menuPackages.map((menu) => {
+            return (
+              <option key={menu.package_id} value={menu.title}>
+                {menu.title}
+              </option>
+            );
+          })}
         </Form.Select>
 
         <Button variant="primary" type="submit">
