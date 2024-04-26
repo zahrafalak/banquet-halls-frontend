@@ -14,7 +14,6 @@ export const HallsProvider = ({ children }) => {
       try {
         const resp = await axios.get("http://localhost:8080/api/v1/halls");
         setHallsData(resp.data);
-        console.log(resp.data);
         setError(null);
       } catch (err) {
         setError("Failed to fetch halls data");
