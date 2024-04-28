@@ -10,7 +10,7 @@ const BookingForm = () => {
   const { hallsData } = useContext(HallsContext);
   const { menuPackages } = useContext(MenuContext);
 
-  const validateFormInput = (e) => {
+  const validateTextInput = (e) => {
     const { id, value } = e.target;
     const nameRegex = /^[a-zA-Z\s]*$/;
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -52,14 +52,27 @@ const BookingForm = () => {
     setErrors(currentError);
   };
 
+  const validateDropdownSelection = (e) => {
+    const { id, value } = e.target;
+
+    if (value === "") {
+      currentError[id] = "Please make a selection";
+    }
+    setErrors(currentError); // Update the state
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Label htmlFor="inputFirstName">First Name</Form.Label>
         <Form.Control
           type="text"
           id="inputFirstName"
-          onBlur={validateFormInput}
+          onBlur={validateTextInput}
           isInvalid={errors.inputFirstName}
         />
         {errors.inputFirstName && (
@@ -70,7 +83,7 @@ const BookingForm = () => {
         <Form.Control
           type="text"
           id="inputLastName"
-          onBlur={validateFormInput}
+          onBlur={validateTextInput}
           isInvalid={errors.inputLastName}
         />
         {errors.inputLastName && (
@@ -82,7 +95,7 @@ const BookingForm = () => {
           <Form.Control
             type="email"
             placeholder="name@example.com"
-            onBlur={validateFormInput}
+            onBlur={validateTextInput}
             isInvalid={errors["exampleForm.ControlInput1"]}
           />
           {errors["exampleForm.ControlInput1"] && (
@@ -97,7 +110,7 @@ const BookingForm = () => {
           type="text"
           id="inputEventDate"
           placeholder="YYYY-MM-DD"
-          onBlur={validateFormInput}
+          onBlur={validateTextInput}
           isInvalid={errors.inputEventDate}
         />
         {errors.inputEventDate && (
@@ -105,7 +118,13 @@ const BookingForm = () => {
         )}
 
         <Form.Label>Choice of Hall</Form.Label>
-        <Form.Select aria-label="Choice of Hall" defaultValue="">
+        <Form.Select
+          id="hallSelection"
+          aria-label="Choice of Hall"
+          defaultValue=""
+          onBlur={validateDropdownSelection}
+          isInvalid={errors.hallSelection}
+        >
           <option value="" disabled>
             Choose a hall option
           </option>
@@ -117,12 +136,17 @@ const BookingForm = () => {
             );
           })}
         </Form.Select>
+        {errors.hallSelection && (
+          <div className="invalid-feedback">{errors.hallSelection}</div>
+        )}
 
         <Form.Label>Choice of Menu Package</Form.Label>
         <Form.Select
+          id="menuSelection"
           aria-label="Choice of Menu Package"
           defaultValue=""
-          onBlur={validateFormInput}
+          onBlur={validateDropdownSelection}
+          isInvalid={errors.menuSelection}
         >
           <option value="" disabled>
             Choose a menu option
@@ -136,6 +160,9 @@ const BookingForm = () => {
             );
           })}
         </Form.Select>
+        {errors.menuSelection && (
+          <div className="invalid-feedback">{errors.menuSelection}</div>
+        )}
 
         <Button variant="primary" type="submit">
           Submit Booking Request
