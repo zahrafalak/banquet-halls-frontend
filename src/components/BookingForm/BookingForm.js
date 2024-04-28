@@ -4,70 +4,27 @@ import React, { useContext, useState } from "react";
 import HallsContext from "../../contexts/HallsContext";
 import MenuContext from "../../contexts/MenuContext";
 import "./BookingForm.scss";
+import {
+  validateTextInput,
+  validateDropdownSelection,
+} from "../../utils/formValidations";
 
 const BookingForm = () => {
   const [errors, setErrors] = useState({});
-  let currentError = { ...errors };
   const { hallsData } = useContext(HallsContext);
   const { menuPackages } = useContext(MenuContext);
 
-  const validateTextInput = (e) => {
-    const { id, value } = e.target;
-    const nameRegex = /^[a-zA-Z\s]*$/;
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
-    if (value.trim() === "") {
-      // check for empty field
-      currentError[id] = "This field cannot be blank";
-    } else if (id === "inputFirstName" || id === "inputLastName") {
-      // validate name inputs
-      if (!nameRegex.test(value)) {
-        currentError[id] = "Please enter a valid name";
-      } else {
-        currentError[id] = "";
-      }
-    } else if (id === "exampleForm.ControlInput1") {
-      //validate email input
-      if (!emailRegex.test(value)) {
-        currentError[id] = "Invalid date. Please enter a valid email address";
-      } else {
-        currentError[id] = "";
-      }
-    } else if (id === "inputEventDate") {
-      //validate event date input
-      if (!dateRegex.test(value)) {
-        currentError[id] = "Please enter the date in YYYY-MM-DD format";
-      } else {
-        // validate that event date is in future
-        const inputDate = new Date(value);
-        const currentDate = new Date();
-        if (inputDate <= currentDate) {
-          currentError[id] = "Please enter a future date";
-        } else {
-          currentError[id] = "";
-        }
-      }
-    }
-
-    setErrors(currentError);
-  };
-
-  const validateDropdownSelection = (e) => {
-    const { id, value } = e.target;
-
-    if (value === "") {
-      currentError[id] = "Please make a selection";
-    }
-    setErrors(currentError); // Update the state
+  const handleValidation = (e, validationFunction) => {
+    validationFunction(e, errors, setErrors);
   };
 
   const handleSubmit = (e) => {
-    alert("Form submitted");
+    e.preventDefault();
   };
 
   return (
     <>
+      <h2 className="section-heading">Submit new booking request</h2>
       <Form className="booking-form" onSubmit={handleSubmit}>
         <Form.Label className="booking-form__label" htmlFor="inputFirstName">
           First Name
@@ -76,7 +33,7 @@ const BookingForm = () => {
           className="booking-form__input"
           type="text"
           id="inputFirstName"
-          onBlur={validateTextInput}
+          onBlur={(e) => handleValidation(e, validateTextInput)}
           isInvalid={errors.inputFirstName}
         />
         {errors.inputFirstName && (
@@ -90,7 +47,7 @@ const BookingForm = () => {
           className="booking-form__input"
           type="text"
           id="inputLastName"
-          onBlur={validateTextInput}
+          onBlur={(e) => handleValidation(e, validateTextInput)}
           isInvalid={errors.inputLastName}
         />
         {errors.inputLastName && (
@@ -103,7 +60,7 @@ const BookingForm = () => {
             className="booking-form__input"
             type="email"
             placeholder="name@example.com"
-            onBlur={validateTextInput}
+            onBlur={(e) => handleValidation(e, validateTextInput)}
             isInvalid={errors["exampleForm.ControlInput1"]}
           />
           {errors["exampleForm.ControlInput1"] && (
@@ -121,7 +78,7 @@ const BookingForm = () => {
           type="text"
           id="inputEventDate"
           placeholder="YYYY-MM-DD"
-          onBlur={validateTextInput}
+          onBlur={(e) => handleValidation(e, validateTextInput)}
           isInvalid={errors.inputEventDate}
         />
         {errors.inputEventDate && (
@@ -134,7 +91,7 @@ const BookingForm = () => {
           id="hallSelection"
           aria-label="Choice of Hall"
           defaultValue=""
-          onBlur={validateDropdownSelection}
+          onBlur={(e) => handleValidation(e, validateDropdownSelection)}
           isInvalid={errors.hallSelection}
         >
           <option value="" disabled>
@@ -160,7 +117,7 @@ const BookingForm = () => {
           id="menuSelection"
           aria-label="Choice of Menu Package"
           defaultValue=""
-          onBlur={validateDropdownSelection}
+          onBlur={(e) => handleValidation(e, validateDropdownSelection)}
           isInvalid={errors.menuSelection}
         >
           <option value="" disabled>
