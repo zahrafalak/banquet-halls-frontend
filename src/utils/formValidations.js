@@ -50,3 +50,27 @@ export const validateDropdownSelection = (e, errors, setError) => {
 
   setError(newErrors);
 };
+
+export const validateAllFormFields = (formRef) => {
+  const requiredFields = [
+    "inputFirstName",
+    "inputLastName",
+    "exampleForm.ControlInput1",
+    "inputEventDate",
+    "hallSelection",
+    "menuSelection",
+  ];
+
+  let formIsValid = true;
+  const errors = {};
+
+  requiredFields.forEach((fieldId) => {
+    const input = formRef.current.elements[fieldId];
+    if (!input.value.trim()) {
+      errors[fieldId] = "This field cannot be blank";
+      formIsValid = false;
+    }
+  });
+
+  return { formIsValid, errors };
+};
