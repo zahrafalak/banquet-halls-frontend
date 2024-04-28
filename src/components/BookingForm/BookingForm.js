@@ -98,6 +98,7 @@ const BookingForm = () => {
           id="inputFirstName"
           onBlur={(e) => handleValidation(e, validateTextInput)}
           isInvalid={errors.inputFirstName}
+          autoFocus
         />
         {errors.inputFirstName && (
           <div className="invalid-feedback">{errors.inputFirstName}</div>
@@ -138,9 +139,8 @@ const BookingForm = () => {
         </Form.Label>
         <Form.Control
           className="booking-form__input"
-          type="text"
+          type="date"
           id="inputEventDate"
-          placeholder="YYYY-MM-DD"
           onBlur={(e) => handleValidation(e, validateTextInput)}
           isInvalid={errors.inputEventDate}
         />
