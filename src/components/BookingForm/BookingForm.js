@@ -1,9 +1,11 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import HallsContext from "../../contexts/HallsContext";
 import MenuContext from "../../contexts/MenuContext";
 import "./BookingForm.scss";
+import axios from "axios";
+
 import {
   validateTextInput,
   validateDropdownSelection,
@@ -12,6 +14,7 @@ import {
 
 const BookingForm = () => {
   const [errors, setErrors] = useState({});
+  const [successfulSubmission, setSuccessfulSubmission] = useState(false);
   const { hallsData } = useContext(HallsContext);
   const { menuPackages } = useContext(MenuContext);
   const formRef = useRef(null);
@@ -21,6 +24,7 @@ const BookingForm = () => {
     validationFunction(e, errors, setErrors);
   };
 
+  // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -30,11 +34,53 @@ const BookingForm = () => {
     if (!formIsValid) {
       setErrors(newErrors);
       alert("Please fill out all required fields.");
-      return;
+    } else {
+      setSuccessfulSubmission(true);
     }
-
-    console.log("Form submitted successfully!");
   };
+
+  //if validation returns true, do a POST request
+  useEffect(() => {
+    if (successfulSubmission) {
+      // Construct the data object according to the backend structure
+      const formData = {
+        first_name: formRef.current.elements["inputFirstName"].value,
+        last_name: formRef.current.elements["inputLastName"].value,
+        email: formRef.current.elements["exampleForm.ControlInput1"].value,
+        hall_id: formRef.current.elements["hallSelection"].value,
+        menu_package_id: formRef.current.elements["menuSelection"].value,
+        event_date: formRef.current.elements["inputEventDate"].value,
+      };
+
+      // function to send booking request to backend
+      const createBookingRequest = async (formData) => {
+        console.log("Received formData:", formData);
+        try {
+          const payLoad = {
+            //convert ids from strings to integers
+            ...formData,
+            hall_id: parseInt(formData?.hall_id, 10),
+            menu_package_id: parseInt(formData?.menu_package_id, 10),
+          };
+
+          const response = await axios.post(
+            "http://localhost:8080/api/v1/booking-requests",
+            payLoad,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log(response.data); // Logging the data from the response
+        } catch (error) {
+          console.error("Failed to create booking request:", error);
+          // Handle errors here, such as updating the UI to inform the user
+        }
+      };
+      createBookingRequest(formData);
+    }
+  }, [successfulSubmission]);
 
   return (
     <>
@@ -45,6 +91,7 @@ const BookingForm = () => {
         </Form.Label>
         <Form.Control
           className="booking-form__input"
+          name="firstName"
           type="text"
           id="inputFirstName"
           onBlur={(e) => handleValidation(e, validateTextInput)}
@@ -113,7 +160,7 @@ const BookingForm = () => {
           </option>
           {hallsData.map((hall) => {
             return (
-              <option key={hall.hall_id} value={hall.name}>
+              <option key={hall.hall_id} value={hall.hall_id}>
                 {hall.name} - CA$ {hall.price}
               </option>
             );
@@ -140,7 +187,7 @@ const BookingForm = () => {
 
           {menuPackages.map((menu) => {
             return (
-              <option key={menu.package_id} value={menu.title}>
+              <option key={menu.package_id} value={menu.package_id}>
                 {menu.title} - CA$ {menu.price_per_head} per head
               </option>
             );
