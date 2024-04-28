@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import React, { useContext, useState } from "react";
 import HallsContext from "../../contexts/HallsContext";
 import MenuContext from "../../contexts/MenuContext";
+import "./BookingForm.scss";
 
 const BookingForm = () => {
   const [errors, setErrors] = useState({});
@@ -62,14 +63,17 @@ const BookingForm = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    alert("Form submitted");
   };
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <Form.Label htmlFor="inputFirstName">First Name</Form.Label>
+      <Form className="booking-form" onSubmit={handleSubmit}>
+        <Form.Label className="booking-form__label" htmlFor="inputFirstName">
+          First Name
+        </Form.Label>
         <Form.Control
+          className="booking-form__input"
           type="text"
           id="inputFirstName"
           onBlur={validateTextInput}
@@ -79,8 +83,11 @@ const BookingForm = () => {
           <div className="invalid-feedback">{errors.inputFirstName}</div>
         )}
 
-        <Form.Label htmlFor="inputLastName">Last Name</Form.Label>
+        <Form.Label className="booking-form__label" htmlFor="inputLastName">
+          Last Name
+        </Form.Label>
         <Form.Control
+          className="booking-form__input"
           type="text"
           id="inputLastName"
           onBlur={validateTextInput}
@@ -91,8 +98,9 @@ const BookingForm = () => {
         )}
 
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-          <Form.Label>Email address</Form.Label>
+          <Form.Label className="booking-form__label">Email address</Form.Label>
           <Form.Control
+            className="booking-form__input"
             type="email"
             placeholder="name@example.com"
             onBlur={validateTextInput}
@@ -105,8 +113,11 @@ const BookingForm = () => {
           )}
         </Form.Group>
 
-        <Form.Label htmlFor="inputEventDate">Date of Event</Form.Label>
+        <Form.Label className="booking-form__label" htmlFor="inputEventDate">
+          Date of Event
+        </Form.Label>
         <Form.Control
+          className="booking-form__input"
           type="text"
           id="inputEventDate"
           placeholder="YYYY-MM-DD"
@@ -117,8 +128,9 @@ const BookingForm = () => {
           <div className="invalid-feedback">{errors.inputEventDate}</div>
         )}
 
-        <Form.Label>Choice of Hall</Form.Label>
+        <Form.Label className="booking-form__label">Choice of Hall</Form.Label>
         <Form.Select
+          className="booking-form__input"
           id="hallSelection"
           aria-label="Choice of Hall"
           defaultValue=""
@@ -140,8 +152,11 @@ const BookingForm = () => {
           <div className="invalid-feedback">{errors.hallSelection}</div>
         )}
 
-        <Form.Label>Choice of Menu Package</Form.Label>
+        <Form.Label className="booking-form__label">
+          Choice of Menu Package
+        </Form.Label>
         <Form.Select
+          className="booking-form__input"
           id="menuSelection"
           aria-label="Choice of Menu Package"
           defaultValue=""
@@ -164,7 +179,7 @@ const BookingForm = () => {
           <div className="invalid-feedback">{errors.menuSelection}</div>
         )}
 
-        <Button variant="primary" type="submit">
+        <Button className="cta" variant="primary" type="submit">
           Submit Booking Request
         </Button>
       </Form>
