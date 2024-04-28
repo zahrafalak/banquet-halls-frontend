@@ -54,7 +54,6 @@ const BookingForm = () => {
 
       // function to send booking request to backend
       const createBookingRequest = async (formData) => {
-        console.log("Received formData:", formData);
         try {
           const payLoad = {
             //convert ids from strings to integers
@@ -72,10 +71,13 @@ const BookingForm = () => {
               },
             }
           );
-          console.log(response.data); // Logging the data from the response
+          console.log("response data", response.data); // Logging the data from the response
+          // clear out from after successful submission
+          if (formRef.current) {
+            formRef.current.reset();
+          }
         } catch (error) {
           console.error("Failed to create booking request:", error);
-          // Handle errors here, such as updating the UI to inform the user
         }
       };
       createBookingRequest(formData);
