@@ -26,7 +26,8 @@ export const validateTextInput = (e, errors, setError) => {
     } else {
       const inputDate = new Date(value);
       const currentDate = new Date();
-      if (inputDate <= currentDate) {
+      currentDate.setHours(0, 0, 0, 0);
+      if (inputDate < currentDate) {
         newErrors[id] = "Please enter a future date";
       } else {
         delete newErrors[id]; // Clear error if date is correct

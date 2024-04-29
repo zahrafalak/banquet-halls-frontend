@@ -11,6 +11,7 @@ import {
   validateDropdownSelection,
   validateAllFormFields,
 } from "../../utils/formValidations";
+import { useNavigate } from "react-router-dom";
 
 const BookingForm = () => {
   const [errors, setErrors] = useState({});
@@ -18,6 +19,7 @@ const BookingForm = () => {
   const { hallsData } = useContext(HallsContext);
   const { menuPackages } = useContext(MenuContext);
   const formRef = useRef(null);
+  const navigate = useNavigate();
 
   // calling validation functions in formValidations.js
   const handleValidation = (e, validationFunction) => {
@@ -36,6 +38,12 @@ const BookingForm = () => {
       alert("Please fill out all required fields.");
     } else {
       setSuccessfulSubmission(true);
+      // clear out from after successful submission
+      if (formRef.current) {
+        formRef.current.reset();
+      }
+      alert("Form submitted successfully.");
+      navigate("/");
     }
   };
 
@@ -62,7 +70,7 @@ const BookingForm = () => {
             menu_package_id: parseInt(formData?.menu_package_id, 10),
           };
 
-          const response = await axios.post(
+          await axios.post(
             "http://localhost:8080/api/v1/booking-requests",
             payLoad,
             {
@@ -71,11 +79,6 @@ const BookingForm = () => {
               },
             }
           );
-          console.log("response data", response.data); // Logging the data from the response
-          // clear out from after successful submission
-          if (formRef.current) {
-            formRef.current.reset();
-          }
         } catch (error) {
           console.error("Failed to create booking request:", error);
         }
