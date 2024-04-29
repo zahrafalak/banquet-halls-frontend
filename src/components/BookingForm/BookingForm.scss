@@ -1,5 +1,10 @@
+@use "../../styles/mixins.scss" as *;
+
 .booking-form {
-  margin: 2rem;
+  margin: 2rem 10rem;
+  @include desktop {
+    margin: 2rem 14rem;
+  }
 
   &__input {
     margin-bottom: 1rem;

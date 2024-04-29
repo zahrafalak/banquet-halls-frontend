@@ -98,7 +98,6 @@ const BookingForm = () => {
           id="inputFirstName"
           onBlur={(e) => handleValidation(e, validateTextInput)}
           isInvalid={errors.inputFirstName}
-          autoFocus
         />
         {errors.inputFirstName && (
           <div className="invalid-feedback">{errors.inputFirstName}</div>
