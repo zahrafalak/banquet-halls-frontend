@@ -18,47 +18,67 @@ Sky Banquet Halls offers a digital booking system for banquet halls, designed to
 - **Menu Selection**: Clients can choose from various predefined menu packages tailored to different event types and preferences.
 - **Responsive Design**: The application adapts seamlessly to tablet and desktop screen sizes. The tablet screen was chosen as default considering that most people use either tablets or desktops for event planning tasks.
 
-## Installation
+## Installation Instructions
 
-### Developer Environment
+This project consists of two separate parts: the frontend and the backend, each housed in their own repository. Follow the instructions below to set up both components.
 
-1. **Clone the repository**:
+### Backend Setup
+
+1. **Clone the Backend Repository**:
+   ```bash
+   git clone https://github.com/zahrafalak/banquet-halls-backend.git
+   cd banquet-halls-backend
+   ```
+2. **Install dependencies**
+
+   ```
+   npm install
+   ```
+
+3. **Set Up Environment Variables**:
+   Create a .env file in the root directory and populate it with the necessary environment variables:
+   ```
+    PORT=8080
+    DB_HOST=127.0.0.1
+    DB_NAME=banquetHalls
+    DB_USER=root
+    DB_PASSWORD=rootroot
+   ```
+4. **Run Database Migrations:**:
+   ```
+   npm run migrate
+   ```
+5. **Seed the Database:**:
+
+   ```bash
+   npm run seed
+   ```
+
+6. **Start the Backend Server:**:
+
+   ```
+   nodemon server
+   ```
+
+### Frontend Setup
+
+1. **Clone the front end repository**:
 
    ```bash
    git clone https://github.com/zahrafalak/banquet-halls-frontend.git
+   cd banquet-halls-frontend
    ```
 
-2. **Navigate to Project directory**
+2. **Install dependencies**
 
-3. **Install dependencies**
+   ```
    npm install
+   ```
 
-4. **Set up the database**
-
-Steps to set up the database:
-
-a. Open your terminal and change to the project directory
-`cd path/to/repository`
-
-b. Create a .env file in the root of your project if it doesn't already exist, and populate it with the following environment variables:
-
-```
-PORT=8080
-DB_HOST=127.0.0.1
-DB_NAME=banquetHalls
-DB_USER=root
-DB_PASSWORD=rootroot
-```
-
-c. Install Dependencies. Run the following command to install all required npm packages:
-`npm install`
-
-d. Run the script <npm run migrate> in terminal. (This command uses the migration files to create the necessary database tables and columns.)
-e. Run the script <npm run seed> in terminal. (Seeds populate your newly created database tables with initial data from the seed files)
-
-5. **Start the development servers**
-   Frontend: npm start
-   Backend: nodemon server
+3. **Start the development server**
+   ```
+   npm start
+   ```
 
 ## API References
 
@@ -70,17 +90,17 @@ e. Run the script <npm run seed> in terminal. (Seeds populate your newly created
 - **Success Response**:
   - **Code**: 200 OK
   - **Content**:
-    ```json
-    [
-      {
-        "name": "Emerald Banquet Hall",
-        "capacity": 300,
-        "description": "Our largest hall, adorned with crystal chandeliers and a classic decor. Perfect for weddings and large corporate events.",
-        "price": 5000,
-        "hallImage_url": "http://localhost:8080/hall1.jpg"
-      }, ...
-    ]
-    ```
+  ```json
+   [
+     {
+       "name": "Emerald Banquet Hall",
+       "capacity": 300,
+       "description": "Our largest hall, adorned with crystal chandeliers and a classic decor. Perfect for weddings and large corporate events.",
+       "price": 5000,
+       "hallImage_url": "http://localhost:8080/hall1.jpg"
+     }, ...
+   ]
+  ```
 - **Error Response**:
   - **Code**: Status 400
   - **Content**: `Error retrieving Halls: ${err}`
