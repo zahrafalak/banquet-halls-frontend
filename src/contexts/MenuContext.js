@@ -13,7 +13,7 @@ export const MenuProvider = ({ children }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/menu-packages"
+          `${process.env.REACT_APP_API_URL}/api/v1/menu-packages`
         );
         const packagesWithParsedContents = response.data.map((pkg) => ({
           ...pkg,

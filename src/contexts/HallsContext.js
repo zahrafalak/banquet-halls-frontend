@@ -12,7 +12,7 @@ export const HallsProvider = ({ children }) => {
     const fetchHallsData = async () => {
       setLoading(true);
       try {
-        const resp = await axios.get("http://localhost:8080/api/v1/halls");
+        const resp = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/halls`);
         setHallsData(resp.data);
         setError(null);
       } catch (err) {
