@@ -16,9 +16,9 @@ export const MenuProvider = ({ children }) => {
           `${process.env.REACT_APP_API_URL}/api/v1/menu-packages`
         );
         const packagesWithParsedContents = response.data.map((pkg) => ({
-          ...pkg,
-          contents: JSON.parse(pkg.contents), // Parse the JSON string back into an object
-        }));
+  ...pkg,
+  contents: typeof pkg.contents === "string" ? JSON.parse(pkg.contents) : pkg.contents,
+}));
         setMenuPackages(packagesWithParsedContents);
       } catch (error) {
         setError("Failed to fetch menu packages.");
