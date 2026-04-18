@@ -1,5 +1,4 @@
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
+
 import HallsCard from "../../components/HallsCard/HallsCard";
 import React, { useContext } from "react";
 import HallsContext from "../../contexts/HallsContext";

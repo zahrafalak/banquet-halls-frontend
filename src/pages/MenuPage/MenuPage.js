@@ -1,5 +1,4 @@
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
+
 import MenuPackageCard from "../../components/MenuPackageCard/MenuPackageCard";
 import React, { useContext } from "react";
 import MenuContext from "../../contexts/MenuContext";
