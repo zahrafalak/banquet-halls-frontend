@@ -1,6 +1,7 @@
 import "./styles/global.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Auth0Provider } from "@auth0/auth0-react";
 import HomePage from "./pages/HomePage/HomePage";
 import MenuPage from "./pages/MenuPage/MenuPage";
 import HallsPage from "./pages/HallsPage/HallsPage";
@@ -8,29 +9,34 @@ import BookingPage from "./pages/BookingPage/BookingPage";
 import UnmatchedRoutes from "./pages/UnmatchedRoutes/UnmatchedRoutes";
 import { HallsProvider } from "./contexts/HallsContext";
 import { MenuProvider } from "./contexts/MenuContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
   return (
-    <>
+    <Auth0Provider
+      domain={process.env.REACT_APP_AUTH0_DOMAIN}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+      }}
+    >
       <BrowserRouter>
-        <MenuProvider>
-          <HallsProvider>
-            <Routes>
-              {/* Route for homepage */}
-              <Route path="/" element={<HomePage />} />
-              {/* Route for menu page */}
-              <Route path="/menu" element={<MenuPage />} />
-              {/* Route for halls page */}
-              <Route path="/halls" element={<HallsPage />} />
-              {/* Route for booking page */}
-              <Route path="/booking" element={<BookingPage />} />
-              {/* Route for unmatched path */}
-              <Route path="/*" element={<UnmatchedRoutes />} />
-            </Routes>
-          </HallsProvider>
-        </MenuProvider>
+        <AuthProvider>
+          <MenuProvider>
+            <HallsProvider>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/menu" element={<MenuPage />} />
+                <Route path="/halls" element={<HallsPage />} />
+                <Route path="/booking" element={<BookingPage />} />
+                <Route path="/*" element={<UnmatchedRoutes />} />
+              </Routes>
+            </HallsProvider>
+          </MenuProvider>
+        </AuthProvider>
       </BrowserRouter>
-    </>
+    </Auth0Provider>
   );
 }
 
