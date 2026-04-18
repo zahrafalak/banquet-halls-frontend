@@ -8,7 +8,6 @@ const MenuPage = () => {
   const { menuPackages, isLoading, error } = useContext(MenuContext);
   return (
     <>
-      <Header />
       <div>
         {isLoading ? (
           <p>Loading...</p>
@@ -22,7 +21,7 @@ const MenuPage = () => {
           <p>No menu packages available.</p>
         )}
       </div>
-      <Footer />
+
     </>
   );
 };

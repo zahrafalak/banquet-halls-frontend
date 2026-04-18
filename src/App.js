@@ -10,6 +10,8 @@ import UnmatchedRoutes from "./pages/UnmatchedRoutes/UnmatchedRoutes";
 import { HallsProvider } from "./contexts/HallsContext";
 import { MenuProvider } from "./contexts/MenuContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
         <AuthProvider>
           <MenuProvider>
             <HallsProvider>
+              <Header />
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/menu" element={<MenuPage />} />
@@ -32,6 +35,7 @@ function App() {
                 <Route path="/booking" element={<BookingPage />} />
                 <Route path="/*" element={<UnmatchedRoutes />} />
               </Routes>
+              <Footer />
             </HallsProvider>
           </MenuProvider>
         </AuthProvider>

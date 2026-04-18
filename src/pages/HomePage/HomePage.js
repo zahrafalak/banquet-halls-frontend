@@ -7,11 +7,11 @@ import Features from "../../components/Features/Features";
 const HomePage = () => {
   return (
     <>
-      <Header />
+  
       <MainCarousel />
       <AboutUs />
       <Features />
-      <Footer />
+  
     </>
   );
 };

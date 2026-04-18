@@ -9,7 +9,7 @@ const HallsPage = () => {
 
   return (
     <>
-      <Header />
+
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -21,7 +21,7 @@ const HallsPage = () => {
           })}
         </>
       )}
-      <Footer />
+
     </>
   );
 };
