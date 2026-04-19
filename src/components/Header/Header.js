@@ -8,6 +8,8 @@ import LogoutButton from "../Auth/LogoutButton";
 
 const Header = () => {
   const { isAuthenticated, user, isAdmin } = useAuth();
+  console.log('isAuthenticated:', isAuthenticated);
+
 
   return (
     <>
