@@ -14,6 +14,8 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 
 function App() {
+  console.log('Auth0 Domain:', process.env.REACT_APP_AUTH0_DOMAIN);
+console.log('Auth0 Client ID:', process.env.REACT_APP_AUTH0_CLIENT_ID);
   return (
     <Auth0Provider
       domain={process.env.REACT_APP_AUTH0_DOMAIN}
