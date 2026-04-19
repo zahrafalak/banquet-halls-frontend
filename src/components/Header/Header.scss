@@ -15,3 +15,25 @@
     color: $white;
   }
 }
+
+.auth-btn {
+  background-color: transparent;
+  border: 1.5px solid $secondary-blue;
+  color: $secondary-blue;
+  border-radius: 4px;
+  padding: 0.3rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-left: 1rem;
+
+  &:hover {
+    background-color: $secondary-blue;
+    color: $white;
+  }
+}
+
+.user-name {
+  color: $secondary-blue;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+}

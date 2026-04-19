@@ -33,7 +33,7 @@ const Header = () => {
   <Nav className="ml-auto align-items-center">
     {isAuthenticated ? (
       <>
-        <Navbar.Text className="mr-3 text-light">
+        <Navbar.Text className="user-name">
           {user?.name}
         </Navbar.Text>
         <LogoutButton />
