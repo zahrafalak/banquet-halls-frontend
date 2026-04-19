@@ -9,42 +9,39 @@ import LogoutButton from "../Auth/LogoutButton";
 const Header = () => {
   const { isAuthenticated, user, isAdmin } = useAuth();
 
-
   return (
-    <>
-      <Navbar className="custom-navbar" expand="lg">
-        <Navbar.Brand href="/">
-          <img className="logo" src={Logo} alt="Logo" />
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-  <Nav className="mr-auto">
-    <Nav.Link href="/">Home</Nav.Link>
-    <Nav.Link href="/menu">Menu</Nav.Link>
-    <Nav.Link href="/halls">Halls</Nav.Link>
-    {isAuthenticated && (
-      <>
-        <Nav.Link href="/booking">Booking</Nav.Link>
-        <Nav.Link href="/my-bookings">My Bookings</Nav.Link>
-        {isAdmin && <Nav.Link href="/admin">Admin</Nav.Link>}
-      </>
-    )}
-  </Nav>
-  <Nav className="ml-auto align-items-center">
-    {isAuthenticated ? (
-      <>
-        <Navbar.Text className="user-name">
-          {user?.name}
-        </Navbar.Text>
-        <LogoutButton />
-      </>
-    ) : (
-      <LoginButton />
-    )}
-  </Nav>
-</Navbar.Collapse>
-      </Navbar>
-    </>
+    <Navbar className="custom-navbar" expand="lg">
+      <Navbar.Brand href="/">
+        <img className="logo" src={Logo} alt="Logo" />
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+          <Nav.Link href="/">Home</Nav.Link>
+          <Nav.Link href="/menu">Menu</Nav.Link>
+          <Nav.Link href="/halls">Halls</Nav.Link>
+          {isAuthenticated && (
+            <>
+              <Nav.Link href="/booking">Booking</Nav.Link>
+              <Nav.Link href="/my-bookings">My Bookings</Nav.Link>
+              {isAdmin && <Nav.Link href="/admin">Admin</Nav.Link>}
+            </>
+          )}
+        </Nav>
+        <Nav className="ms-auto align-items-start align-items-lg-center">
+          {isAuthenticated ? (
+            <>
+              <Navbar.Text className="user-name me-2">
+                {user?.name}
+              </Navbar.Text>
+              <LogoutButton />
+            </>
+          ) : (
+            <LoginButton />
+          )}
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
