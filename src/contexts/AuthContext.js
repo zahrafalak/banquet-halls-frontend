@@ -4,6 +4,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+    const auth0 = useAuth0();
+  console.log('Auth0 object:', auth0);
   const {
     user,
     isAuthenticated,
@@ -11,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     loginWithRedirect,
     logout,
     getAccessTokenSilently,
-  } = useAuth0();
+  } = auth0;
 
   const isAdmin = user?.["https://banquet-halls-api/roles"]?.includes("admin");
 
