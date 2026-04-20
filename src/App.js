@@ -1,5 +1,5 @@
 import "./styles/global.scss";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Auth0Provider } from "@auth0/auth0-react";
 import HomePage from "./pages/HomePage/HomePage";
@@ -10,12 +10,15 @@ import UnmatchedRoutes from "./pages/UnmatchedRoutes/UnmatchedRoutes";
 import { HallsProvider } from "./contexts/HallsContext";
 import { MenuProvider } from "./contexts/MenuContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import AuthGuard from "./components/Auth/AuthGuard";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 
 const Auth0ProviderWithNavigate = ({ children }) => {
+  const navigate = useNavigate();
+
   const onRedirectCallback = (appState) => {
-    window.location.replace(appState?.returnTo || window.location.origin);
+    navigate(appState?.returnTo || "/");
   };
 
   return (
@@ -35,8 +38,8 @@ const Auth0ProviderWithNavigate = ({ children }) => {
 
 function App() {
   return (
-    <Auth0ProviderWithNavigate>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Auth0ProviderWithNavigate>
         <AuthProvider>
           <MenuProvider>
             <HallsProvider>
@@ -45,15 +48,22 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/menu" element={<MenuPage />} />
                 <Route path="/halls" element={<HallsPage />} />
-                <Route path="/booking" element={<BookingPage />} />
+                <Route
+                  path="/booking"
+                  element={
+                    <AuthGuard>
+                      <BookingPage />
+                    </AuthGuard>
+                  }
+                />
                 <Route path="/*" element={<UnmatchedRoutes />} />
               </Routes>
               <Footer />
             </HallsProvider>
           </MenuProvider>
         </AuthProvider>
-      </BrowserRouter>
-    </Auth0ProviderWithNavigate>
+      </Auth0ProviderWithNavigate>
+    </BrowserRouter>
   );
 }
 
