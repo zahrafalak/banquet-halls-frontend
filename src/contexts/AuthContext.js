@@ -4,8 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const auth0 = useAuth0();
-  console.log('Auth0 object:', auth0);
+    
   const {
     user,
     isAuthenticated,
