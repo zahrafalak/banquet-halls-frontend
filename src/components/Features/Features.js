@@ -3,10 +3,12 @@ import venueIcon from "../../assets/icons/venue.svg";
 import calendarIcon from "../../assets/icons/calendar.svg";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import "./Features.scss";
 
 const Features = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, loginWithRedirect } = useAuth();
   return (
     <>
       <h2 className="section-heading">Features</h2>
@@ -42,7 +44,9 @@ const Features = () => {
           <Button
             className="cta"
             variant="primary"
-            onClick={() => navigate("/booking")}
+            onClick={() =>
+              isAuthenticated ? navigate("/booking") : loginWithRedirect()
+            }
           >
             Book Now
           </Button>{" "}
