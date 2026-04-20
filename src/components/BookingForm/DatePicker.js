@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
 import axios from "axios";
 
 const DatePicker = ({ selected, onChange }) => {
@@ -21,15 +21,12 @@ const DatePicker = ({ selected, onChange }) => {
   }, []);
 
   return (
-    <ReactDatePicker
+    <DayPicker
+      mode="single"
       selected={selected}
-      onChange={onChange}
-      excludeDates={excludedDates}
-      minDate={new Date()}
-      placeholderText="Select event date"
-      className="form-control booking-form__input"
-      dateFormat="yyyy-MM-dd"
-      autoComplete="off"
+      onSelect={onChange}
+      disabled={[{ before: new Date() }, ...excludedDates]}
+      footer={selected ? `Selected: ${selected.toLocaleDateString()}` : "Pick a date"}
     />
   );
 };
