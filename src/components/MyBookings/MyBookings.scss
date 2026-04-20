@@ -1,0 +1,30 @@
+@use "../../styles/variables.scss" as *;
+
+.my-bookings {
+  margin: 2rem 10rem 5rem 10rem;
+
+  &__message {
+    margin: 2rem 10rem;
+    color: $grey;
+
+    &--error {
+      color: #dc3545;
+    }
+  }
+}
+
+.booking-card {
+  border: 1px solid #dee2e6;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  &__badge {
+    text-transform: capitalize;
+    font-size: 0.85rem;
+  }
+}
