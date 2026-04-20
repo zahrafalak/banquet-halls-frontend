@@ -56,6 +56,7 @@ const BookingForm = () => {
     try {
       setSubmitting(true);
       const token = await getToken();
+      console.log("token:", token);
       await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/booking-requests`,
         {
