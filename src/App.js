@@ -1,5 +1,5 @@
 import "./styles/global.scss";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Auth0Provider } from "@auth0/auth0-react";
 import HomePage from "./pages/HomePage/HomePage";
