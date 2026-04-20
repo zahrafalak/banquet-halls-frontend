@@ -6,13 +6,13 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     
   const {
-    user,
-    isAuthenticated,
-    isLoading,
-    loginWithRedirect,
-    logout,
-    getAccessTokenSilently,
-  } = auth0;
+  user,
+  isAuthenticated,
+  isLoading,
+  loginWithRedirect,
+  logout,
+  getAccessTokenSilently,
+} = useAuth0();
 
   const isAdmin = user?.["https://banquet-halls-api/roles"]?.includes("admin");
 
