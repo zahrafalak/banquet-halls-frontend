@@ -1,0 +1,14 @@
+@use "../../styles/variables.scss" as *;
+
+.admin-dashboard {
+  margin: 2rem 4rem 5rem 4rem;
+
+  &__message {
+    margin: 2rem 4rem;
+    color: $grey;
+
+    &--error {
+      color: #dc3545;
+    }
+  }
+}

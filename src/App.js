@@ -7,6 +7,7 @@ import MenuPage from "./pages/MenuPage/MenuPage";
 import HallsPage from "./pages/HallsPage/HallsPage";
 import BookingPage from "./pages/BookingPage/BookingPage";
 import MyBookingsPage from "./pages/MyBookingsPage/MyBookingsPage";
+import AdminPage from "./pages/AdminPage/AdminPage";
 import UnmatchedRoutes from "./pages/UnmatchedRoutes/UnmatchedRoutes";
 import { HallsProvider } from "./contexts/HallsContext";
 import { MenuProvider } from "./contexts/MenuContext";
@@ -62,6 +63,14 @@ function App() {
                   element={
                     <AuthGuard>
                       <MyBookingsPage />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <AuthGuard>
+                      <AdminPage />
                     </AuthGuard>
                   }
                 />
