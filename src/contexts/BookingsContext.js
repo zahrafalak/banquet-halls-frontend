@@ -31,7 +31,7 @@ export const BookingsProvider = ({ children }) => {
     };
 
     fetchBookings();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, getToken]);
 
   return (
     <BookingsContext.Provider value={{ bookings, loading, error }}>

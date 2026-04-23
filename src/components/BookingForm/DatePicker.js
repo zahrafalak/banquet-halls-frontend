@@ -20,7 +20,7 @@ const DatePicker = ({ selected, onChange }) => {
       }
     };
     fetchBookedDates();
-  }, []);
+  }, [getToken]);
 
   return (
     <DayPicker
