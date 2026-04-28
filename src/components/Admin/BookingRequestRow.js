@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
+import HallsContext from "../../contexts/HallsContext";
+import MenuContext from "../../contexts/MenuContext";
 
 const statusVariant = {
   pending: "warning",
@@ -12,20 +14,25 @@ const statusVariant = {
 
 const BookingRequestRow = ({ booking, onStatusChange }) => {
   const { getToken } = useAuth();
+  const { hallsData } = useContext(HallsContext);
+  const { menuPackages } = useContext(MenuContext);
   const [loading, setLoading] = useState(false);
   const status = booking.status?.toLowerCase() || "pending";
+
+  const hallName = hallsData.find((h) => h.hall_id === booking.hall_id)?.name || "—";
+  const menuTitle = menuPackages.find((m) => m.package_id === booking.menu_package_id)?.title || "—";
 
   const updateStatus = async (newStatus) => {
     try {
       setLoading(true);
       const token = await getToken();
       await axios.patch(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/bookings/${booking.id}`,
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/bookings/${booking.booking_id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       // Update parent state directly instead of refetching the full list
-      onStatusChange(booking.id, newStatus);
+      onStatusChange(booking.booking_id, newStatus);
     } catch (err) {
       console.error("Failed to update booking status:", err);
       alert("Failed to update status. Please try again.");
@@ -38,7 +45,7 @@ const BookingRequestRow = ({ booking, onStatusChange }) => {
     <tr>
       <td>{booking.first_name} {booking.last_name}</td>
       <td>{booking.email}</td>
-      <td>{booking.hall_name}</td>
+      <td>{hallName}</td>
       <td>
         {new Date(booking.event_date).toLocaleDateString("en-CA", {
           year: "numeric",
@@ -46,7 +53,7 @@ const BookingRequestRow = ({ booking, onStatusChange }) => {
           day: "numeric",
         })}
       </td>
-      <td>{booking.menu_package_title}</td>
+      <td>{menuTitle}</td>
       <td>
         <Badge bg={statusVariant[status] || "secondary"}>
           {booking.status}

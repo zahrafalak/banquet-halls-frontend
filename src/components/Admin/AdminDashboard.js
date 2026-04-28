@@ -33,7 +33,7 @@ const AdminDashboard = () => {
 
   const handleStatusChange = (id, newStatus) => {
     setBookings((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
+      prev.map((b) => (b.booking_id === id ? { ...b, status: newStatus } : b))
     );
   };
 
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
             <tbody>
               {bookings.map((booking) => (
                 <BookingRequestRow
-                  key={booking.id}
+                  key={booking.booking_id}
                   booking={booking}
                   onStatusChange={handleStatusChange}
                 />
