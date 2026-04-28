@@ -17,7 +17,7 @@ const MyBookings = () => {
           <p className="my-bookings__message">You have no bookings yet.</p>
         ) : (
           bookings.map((booking) => (
-            <BookingCard key={booking.id} booking={booking} />
+            <BookingCard key={booking.booking_id} booking={booking} />
           ))
         )}
       </div>
