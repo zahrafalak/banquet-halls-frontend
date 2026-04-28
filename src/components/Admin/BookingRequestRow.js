@@ -9,7 +9,8 @@ import MenuContext from "../../contexts/MenuContext";
 const statusVariant = {
   pending: "warning",
   confirmed: "success",
-  rejected: "danger",
+  cancelled: "danger",
+  completed: "secondary",
 };
 
 const BookingRequestRow = ({ booking, onStatusChange }) => {
@@ -65,18 +66,18 @@ const BookingRequestRow = ({ booking, onStatusChange }) => {
           size="sm"
           variant="success"
           className="me-2"
-          disabled={loading || status === "confirmed"}
-          onClick={() => updateStatus("confirmed")}
+          disabled={loading || status === "confirmed" || status === "cancelled"}
+          onClick={() => updateStatus("Confirmed")}
         >
           Confirm
         </Button>
         <Button
           size="sm"
           variant="danger"
-          disabled={loading || status === "rejected"}
-          onClick={() => updateStatus("rejected")}
+          disabled={loading || status === "cancelled"}
+          onClick={() => updateStatus("Cancelled")}
         >
-          Reject
+          Cancel
         </Button>
       </td>
     </tr>
