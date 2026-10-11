@@ -5,6 +5,8 @@ import HallsContext from "../../contexts/HallsContext";
 import MenuContext from "../../contexts/MenuContext";
 import { useAuth } from "../../contexts/AuthContext";
 import DatePicker from "./DatePicker";
+import { validateField, validateBookingForm } from "../../utils/formValidations";
+import { toDateString } from "../../utils/dates";
 import "./BookingForm.scss";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -34,20 +36,13 @@ const BookingForm = () => {
     }
   }, [user]);
 
-  const validate = () => {
-    const newErrors = {};
-    if (!firstName.trim()) newErrors.firstName = "First name is required";
-    if (!lastName.trim()) newErrors.lastName = "Last name is required";
-    if (!email.trim()) newErrors.email = "Email is required";
-    if (!eventDate) newErrors.eventDate = "Event date is required";
-    if (!hallId) newErrors.hallId = "Please select a hall";
-    if (!menuId) newErrors.menuId = "Please select a menu package";
-    return newErrors;
-  };
+  // Check one field as the user leaves it, and clear its error once it's fixed
+  const checkField = (field, value) =>
+    setErrors((prev) => ({ ...prev, [field]: validateField(field, value) }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = validate();
+    const newErrors = validateBookingForm({ firstName, lastName, email, eventDate, hallId, menuId });
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -62,7 +57,7 @@ const BookingForm = () => {
           first_name: firstName,
           last_name: lastName,
           email,
-          event_date: eventDate.toISOString().split("T")[0],
+          event_date: toDateString(eventDate),
           hall_id: parseInt(hallId, 10),
           menu_package_id: parseInt(menuId, 10),
         },
@@ -77,7 +72,9 @@ const BookingForm = () => {
       navigate("/");
     } catch (error) {
       console.error("Failed to create booking request:", error);
-      alert("Failed to submit booking request. Please try again.");
+      // Show the API's validation message when there is one
+      const message = error.response?.status === 400 && error.response.data?.message;
+      alert(message || "Failed to submit booking request. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -96,6 +93,7 @@ const BookingForm = () => {
           id="inputFirstName"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
+          onBlur={(e) => checkField("firstName", e.target.value)}
           isInvalid={!!errors.firstName}
           autoFocus
         />
@@ -112,6 +110,7 @@ const BookingForm = () => {
           id="inputLastName"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
+          onBlur={(e) => checkField("lastName", e.target.value)}
           isInvalid={!!errors.lastName}
         />
         {errors.lastName && (
@@ -127,6 +126,7 @@ const BookingForm = () => {
           id="inputEmail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onBlur={(e) => checkField("email", e.target.value)}
           isInvalid={!!errors.email}
         />
         {errors.email && (
@@ -134,7 +134,13 @@ const BookingForm = () => {
         )}
 
         <Form.Label className="booking-form__label">Date of Event</Form.Label>
-        <DatePicker selected={eventDate} onChange={(date) => setEventDate(date)} />
+        <DatePicker
+          selected={eventDate}
+          onChange={(date) => {
+            setEventDate(date);
+            checkField("eventDate", date);
+          }}
+        />
         {errors.eventDate && (
           <div className="invalid-feedback d-block">{errors.eventDate}</div>
         )}
@@ -144,7 +150,10 @@ const BookingForm = () => {
           className="booking-form__input"
           id="hallSelection"
           value={hallId}
-          onChange={(e) => setHallId(e.target.value)}
+          onChange={(e) => {
+            setHallId(e.target.value);
+            checkField("hallId", e.target.value);
+          }}
           isInvalid={!!errors.hallId}
         >
           <option value="" disabled>
@@ -167,7 +176,10 @@ const BookingForm = () => {
           className="booking-form__input"
           id="menuSelection"
           value={menuId}
-          onChange={(e) => setMenuId(e.target.value)}
+          onChange={(e) => {
+            setMenuId(e.target.value);
+            checkField("menuId", e.target.value);
+          }}
           isInvalid={!!errors.menuId}
         >
           <option value="" disabled>

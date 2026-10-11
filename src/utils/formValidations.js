@@ -1,77 +1,38 @@
-export const validateTextInput = (e, errors, setError) => {
-  const { id, value } = e.target;
-  const nameRegex = /^[a-zA-Z\s]*$/;
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+import { tomorrow } from "./dates";
 
-  // Copy current errors to avoid direct state mutation
-  const newErrors = { ...errors };
+// Same rules as the API (banquet-halls-backend/utils/bookingRequestHelpers.js)
+// Letters from any language, plus spaces, apostrophes and hyphens (e.g. O'Brien, Jean-Luc, Zoë)
+const NAME_PATTERN = /^[\p{L}\p{M}' -]+$/u;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (value.trim() === "") {
-    newErrors[id] = "This field cannot be blank";
-  } else {
-    delete newErrors[id]; // Clear existing errors if the input is corrected
+// Returns an error message for one booking-form field, or "" when the value is valid
+export const validateField = (field, value) => {
+  switch (field) {
+    case "firstName":
+    case "lastName":
+      if (!value.trim()) return "This field cannot be blank";
+      if (!NAME_PATTERN.test(value.trim())) return "Please enter a valid name";
+      return "";
+    case "email":
+      if (!value.trim()) return "This field cannot be blank";
+      if (!EMAIL_PATTERN.test(value.trim())) return "Please enter a valid email address";
+      return "";
+    case "eventDate":
+      if (!value) return "Please pick a date";
+      if (value < tomorrow()) return "Please pick a future date";
+      return "";
+    case "hallId":
+    case "menuId":
+      return value ? "" : "Please make a selection";
+    default:
+      return "";
   }
-
-  if (
-    (id === "inputFirstName" || id === "inputLastName") &&
-    !nameRegex.test(value)
-  ) {
-    newErrors[id] = "Please enter a valid name";
-  } else if (id === "exampleForm.ControlInput1" && !emailRegex.test(value)) {
-    newErrors[id] = "Please enter a valid email address";
-  } else if (id === "inputEventDate") {
-    if (!dateRegex.test(value)) {
-      newErrors[id] = "Please enter the date in YYYY-MM-DD format";
-    } else {
-      const inputDate = new Date(value);
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0);
-      if (inputDate < currentDate) {
-        newErrors[id] = "Please enter a future date";
-      } else {
-        delete newErrors[id]; // Clear error if date is correct
-      }
-    }
-  }
-
-  setError(newErrors);
 };
 
-export const validateDropdownSelection = (e, errors, setError) => {
-  const { id, value } = e.target;
-
-  const newErrors = { ...errors }; // Copy current errors to avoid direct state mutation
-
-  if (value === "") {
-    newErrors[id] = "Please make a selection";
-  } else {
-    delete newErrors[id]; // Clear existing errors if the input is corrected
-  }
-
-  setError(newErrors);
-};
-
-export const validateAllFormFields = (formRef) => {
-  const requiredFields = [
-    "inputFirstName",
-    "inputLastName",
-    "exampleForm.ControlInput1",
-    "inputEventDate",
-    "hallSelection",
-    "menuSelection",
-  ];
-
-  let formIsValid = true;
-  const errors = {};
-
-  requiredFields.forEach((fieldId) => {
-    const input = formRef.current.elements[fieldId];
-    if (!input.value.trim()) {
-      errors[fieldId] = "This field cannot be blank";
-      formIsValid = false;
-    }
-  });
-
-  return { formIsValid, errors };
-};
+// Validates the whole form; returns { fieldName: message } for every invalid field
+export const validateBookingForm = (values) =>
+  Object.fromEntries(
+    Object.entries(values)
+      .map(([field, value]) => [field, validateField(field, value)])
+      .filter(([, message]) => message)
+  );

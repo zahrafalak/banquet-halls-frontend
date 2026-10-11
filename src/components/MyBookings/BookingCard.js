@@ -1,11 +1,13 @@
 import React from "react";
 import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
+import { formatEventDate } from "../../utils/dates";
 
 const statusVariant = {
   pending: "warning",
   confirmed: "success",
-  rejected: "danger",
+  cancelled: "danger",
+  completed: "secondary",
 };
 
 const BookingCard = ({ booking }) => {
@@ -23,11 +25,7 @@ const BookingCard = ({ booking }) => {
         <Card.Text as="div">
           <p className="mb-1">
             <strong>Date:</strong>{" "}
-            {new Date(booking.event_date).toLocaleDateString("en-CA", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+            {formatEventDate(booking.event_date)}
           </p>
           <p className="mb-1">
             <strong>Menu Package:</strong> {booking.menu_package_title}

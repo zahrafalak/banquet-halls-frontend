@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
+import { formatEventDate } from "../../utils/dates";
 import { useAuth } from "../../contexts/AuthContext";
 import HallsContext from "../../contexts/HallsContext";
 import MenuContext from "../../contexts/MenuContext";
@@ -48,11 +49,7 @@ const BookingRequestRow = ({ booking, onStatusChange }) => {
       <td>{booking.email}</td>
       <td>{hallName}</td>
       <td>
-        {new Date(booking.event_date).toLocaleDateString("en-CA", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}
+        {formatEventDate(booking.event_date)}
       </td>
       <td>{menuTitle}</td>
       <td>

@@ -1,122 +1,64 @@
-import {
-  validateTextInput,
-  validateDropdownSelection,
-  validateAllFormFields,
-} from "./formValidations";
+import { validateField, validateBookingForm } from "./formValidations";
+import { tomorrow } from "./dates";
 
-// The validators read e.target.id and e.target.value, then pass the new errors to setError
-const runTextValidation = (id, value, errors = {}) => {
-  const setError = jest.fn();
-  validateTextInput({ target: { id, value } }, errors, setError);
-  return setError.mock.calls[0][0];
-};
-
-describe("validateTextInput", () => {
-  it("flags a blank field", () => {
-    expect(runTextValidation("inputFirstName", "  ")).toEqual({
-      inputFirstName: "This field cannot be blank",
-    });
+describe("validateField", () => {
+  it.each(["firstName", "lastName", "email"])("flags a blank %s", (field) => {
+    expect(validateField(field, "  ")).toBe("This field cannot be blank");
   });
 
   it("flags a name with numbers or symbols", () => {
-    expect(runTextValidation("inputLastName", "Kh@n1")).toEqual({
-      inputLastName: "Please enter a valid name",
-    });
+    expect(validateField("lastName", "Kh@n1")).toBe("Please enter a valid name");
   });
 
-  it("clears the error once the name is corrected", () => {
-    const errors = { inputFirstName: "Please enter a valid name" };
-
-    expect(runTextValidation("inputFirstName", "Ayesha", errors)).toEqual({});
+  it.each(["Ayesha", "O'Brien", "Jean-Luc", "Zoë"])("accepts the name %s", (name) => {
+    expect(validateField("firstName", name)).toBe("");
   });
 
   it("flags an email without an @", () => {
-    expect(runTextValidation("exampleForm.ControlInput1", "ayesha.example.com")).toEqual({
-      "exampleForm.ControlInput1": "Please enter a valid email address",
-    });
+    expect(validateField("email", "ayesha.example.com")).toBe("Please enter a valid email address");
   });
 
   it("accepts a valid email", () => {
-    expect(runTextValidation("exampleForm.ControlInput1", "ayesha@example.com")).toEqual({});
+    expect(validateField("email", "ayesha@example.com")).toBe("");
   });
 
-  it("flags a date that is not in YYYY-MM-DD format", () => {
-    expect(runTextValidation("inputEventDate", "15/06/2099")).toEqual({
-      inputEventDate: "Please enter the date in YYYY-MM-DD format",
-    });
+  it("asks for a date when none is picked", () => {
+    expect(validateField("eventDate", null)).toBe("Please pick a date");
   });
 
-  it("flags a date in the past", () => {
-    expect(runTextValidation("inputEventDate", "2020-01-01")).toEqual({
-      inputEventDate: "Please enter a future date",
-    });
+  it("flags today, which is too soon to book", () => {
+    expect(validateField("eventDate", new Date())).toBe("Please pick a future date");
   });
 
-  it("accepts a future date", () => {
-    expect(runTextValidation("inputEventDate", "2099-06-15")).toEqual({});
+  it("accepts tomorrow", () => {
+    expect(validateField("eventDate", tomorrow())).toBe("");
   });
 
-  it("keeps errors on other fields", () => {
-    const errors = { inputLastName: "Please enter a valid name" };
-
-    expect(runTextValidation("inputFirstName", "Ayesha", errors)).toEqual(errors);
+  it("asks for a hall or menu selection when none is made", () => {
+    expect(validateField("hallId", "")).toBe("Please make a selection");
+    expect(validateField("menuId", "2")).toBe("");
   });
 });
 
-describe("validateDropdownSelection", () => {
-  it("asks for a selection when none is made", () => {
-    const setError = jest.fn();
-    validateDropdownSelection({ target: { id: "hallSelection", value: "" } }, {}, setError);
-
-    expect(setError).toHaveBeenCalledWith({ hallSelection: "Please make a selection" });
-  });
-
-  it("clears the error once an option is chosen", () => {
-    const setError = jest.fn();
-    const errors = { hallSelection: "Please make a selection" };
-    validateDropdownSelection({ target: { id: "hallSelection", value: "1" } }, errors, setError);
-
-    expect(setError).toHaveBeenCalledWith({});
-  });
-});
-
-describe("validateAllFormFields", () => {
-  // A stand-in for the form's ref: elements looked up by id, each with a value
-  const formRef = (values) => ({
-    current: {
-      elements: Object.fromEntries(
-        Object.entries(values).map(([id, value]) => [id, { value }])
-      ),
-    },
-  });
-
+describe("validateBookingForm", () => {
   const completeForm = {
-    inputFirstName: "Ayesha",
-    inputLastName: "Khan",
-    "exampleForm.ControlInput1": "ayesha@example.com",
-    inputEventDate: "2099-06-15",
-    hallSelection: "1",
-    menuSelection: "2",
+    firstName: "Ayesha",
+    lastName: "Khan",
+    email: "ayesha@example.com",
+    eventDate: tomorrow(),
+    hallId: "1",
+    menuId: "2",
   };
 
   it("passes a fully completed form", () => {
-    expect(validateAllFormFields(formRef(completeForm))).toEqual({
-      formIsValid: true,
-      errors: {},
-    });
+    expect(validateBookingForm(completeForm)).toEqual({});
   });
 
-  it("blocks submission and lists every blank field", () => {
-    const result = validateAllFormFields(
-      formRef({ ...completeForm, inputLastName: "", menuSelection: " " })
-    );
-
-    expect(result).toEqual({
-      formIsValid: false,
-      errors: {
-        inputLastName: "This field cannot be blank",
-        menuSelection: "This field cannot be blank",
-      },
+  it("lists every invalid field", () => {
+    expect(validateBookingForm({ ...completeForm, lastName: "", email: "nope", menuId: "" })).toEqual({
+      lastName: "This field cannot be blank",
+      email: "Please enter a valid email address",
+      menuId: "Please make a selection",
     });
   });
 });
