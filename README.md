@@ -75,7 +75,9 @@ The app will open at `http://localhost:3000`.
 npm test
 ```
 
-- **Form validation** (`src/utils/formValidations.test.js`): blank fields, invalid names and email, date format, past and future dates, dropdown selection, and the whole-form check before submit.
+- **Booking form** (`src/components/BookingForm/BookingForm.test.js`): an invalid email shows an error as you leave the field; submitting an empty form shows every error and sends nothing.
+- **Form validation rules** (`src/utils/formValidations.test.js`): blank fields, names (including O'Brien and Zoë), email, today vs tomorrow, dropdown selection, and the whole-form check.
+- **Event dates** (`src/utils/dates.test.js`): dates are read and shown as the same calendar day the user picked.
 - **Sign-in guard** (`src/components/Auth/AuthGuard.test.js`): shows a loading message while Auth0 checks the session, asks signed-out users to log in and hides the page, starts the Auth0 login on click, and shows the page to signed-in users.
 
 GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, the tests and the production build on every push and pull request. With `CI=true`, lint warnings fail the build. Vercel also builds a preview of every pull request.
@@ -92,14 +94,17 @@ The environment variables are set in the Vercel dashboard; `REACT_APP_API_URL` p
 
 ## Form Validation
 
-The booking form includes both frontend and backend validation:
+The booking form validates on the client with the same rules as the API (`src/utils/formValidations.js`), and the API validates again on the server:
 
 - All fields are required
-- Name fields accept letters and spaces only
+- Names accept letters (any language), spaces, apostrophes and hyphens, e.g. O'Brien, Zoë
 - Email must be a valid format
-- Event date must be in `YYYY-MM-DD` format and in the future
+- The event date must be after today; the date picker also disables past dates and dates already confirmed
 - A hall and menu package must be selected
-- Validation runs on blur (as you leave each field) and on submit
+- Each field is checked as you leave it (or change it), and the whole form is checked on submit; nothing is sent while any field is invalid
+- If the API still rejects a request, its validation message is shown
+
+Event dates travel as `YYYY-MM-DD` strings and are read in local time (`src/utils/dates.js`), so a booking never shows a day early.
 
 ---
 
