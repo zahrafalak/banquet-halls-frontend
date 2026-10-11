@@ -1,16 +1,21 @@
 # Sky Banquet Halls — Frontend
 
-A responsive React application for browsing and booking banquet halls. Users can view available halls, browse menu packages, and submit booking requests.
+A responsive React single-page application for browsing and booking banquet halls. Visitors can view halls and menu packages; logged-in users can request bookings and track them; admins can confirm or cancel requests.
 
 **Live site:** https://banquet-halls-frontend.vercel.app
+
+[![CI](https://github.com/zahrafalak/banquet-halls-frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/zahrafalak/banquet-halls-frontend/actions/workflows/ci.yml)
 
 ---
 
 ## Tech Stack
 
-- **Framework:** React
+- **Framework:** React (Create React App), React Router, Context API
+- **Authentication:** Auth0 (`@auth0/auth0-react`)
 - **Styling:** Bootstrap + SCSS
 - **HTTP Client:** Axios
+- **Testing:** Jest + React Testing Library
+- **CI:** GitHub Actions
 - **Hosting:** Vercel
 
 ---
@@ -19,7 +24,11 @@ A responsive React application for browsing and booking banquet halls. Users can
 
 - Browse available banquet halls with photos, capacity, and pricing
 - View curated menu packages with detailed contents
-- Submit booking requests with full form validation
+- Log in with Auth0; the booking, My Bookings and admin pages are protected by a sign-in guard
+- Submit booking requests with full form validation; the date picker disables past dates and dates already confirmed
+- **My Bookings:** see your own booking requests and their status
+- **Admin dashboard** (admin role only): view all booking requests and confirm or cancel them
+- Every API call to a protected route sends the Auth0 access token as a bearer token
 - Responsive design for tablet and desktop
 
 ---
@@ -43,9 +52,12 @@ cd banquet-halls-frontend
 npm install
 ```
 
-3. Create a `.env` file in the root:
+3. Create a `.env` file in the root (never commit it):
 ```
 REACT_APP_API_URL=http://localhost:8080
+REACT_APP_AUTH0_DOMAIN=your-tenant.auth0.com
+REACT_APP_AUTH0_CLIENT_ID=your-auth0-client-id
+REACT_APP_AUTH0_AUDIENCE=your-auth0-api-identifier
 ```
 
 4. Start the dev server
@@ -57,11 +69,24 @@ The app will open at `http://localhost:3000`.
 
 ---
 
+## Testing and CI
+
+```bash
+npm test
+```
+
+- **Form validation** (`src/utils/formValidations.test.js`): blank fields, invalid names and email, date format, past and future dates, dropdown selection, and the whole-form check before submit.
+- **Sign-in guard** (`src/components/Auth/AuthGuard.test.js`): shows a loading message while Auth0 checks the session, asks signed-out users to log in and hides the page, starts the Auth0 login on click, and shows the page to signed-in users.
+
+GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, the tests and the production build on every push and pull request. With `CI=true`, lint warnings fail the build. Vercel also builds a preview of every pull request.
+
+---
+
 ## Deployment
 
-This frontend is deployed on **Vercel** with automatic deploys on every push to `main`.
+This frontend is deployed on **Vercel** with automatic deploys on every push to `main`, and a preview deployment for every pull request.
 
-The `REACT_APP_API_URL` environment variable is set in the Vercel dashboard to point to the live Railway backend.
+The environment variables are set in the Vercel dashboard; `REACT_APP_API_URL` points to the live Railway backend.
 
 ---
 
@@ -82,14 +107,14 @@ The booking form includes both frontend and backend validation:
 
 ```
 banquet-halls-frontend/
+├── .github/workflows/  # CI workflow (GitHub Actions)
 ├── public/             # Static assets
 └── src/
-    ├── components/     # React components
-    │   └── BookingForm/
-    ├── contexts/       # React context (halls, menu packages)
-    │   ├── HallsContext.js
-    │   └── MenuContext.js
-    └── App.js          # Root component
+    ├── components/     # React components (Admin, Auth, BookingForm, MyBookings, ...)
+    ├── contexts/       # React context (auth, bookings, halls, menu packages)
+    ├── pages/          # Route pages (Home, Halls, Menu, Booking, My Bookings, Admin)
+    ├── utils/          # Form validation helpers (+ tests)
+    └── App.js          # Routes, Auth0 provider and sign-in guard
 ```
 
 ---
@@ -99,10 +124,19 @@ banquet-halls-frontend/
 | Variable | Description |
 |---|---|
 | `REACT_APP_API_URL` | Base URL of the backend API |
+| `REACT_APP_AUTH0_DOMAIN` | Auth0 tenant domain |
+| `REACT_APP_AUTH0_CLIENT_ID` | Auth0 application client ID |
+| `REACT_APP_AUTH0_AUDIENCE` | Auth0 API identifier (the audience of the access token) |
 
 ---
 
 ## Related
 
 - **Backend repo:** https://github.com/zahrafalak/banquet-halls-backend
-- **Live API:** https://banquet-halls-backend-production.up.railway.app
+- **Live API:** https://banquet-halls-backend-production.up.railway.app/api/v1/halls
+
+---
+
+## How AI was used
+
+I built the original app during my BrainStation diploma. In 2026 I added Auth0 login, and used Claude Code as a co-developer to build the My Bookings view and the admin dashboard, fix two Vercel build failures at their root, and add the tests and CI workflow. I reviewed every change, ran it in the browser, and kept secrets and AI-tool configuration out of the repository.
